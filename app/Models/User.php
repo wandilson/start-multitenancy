@@ -66,13 +66,16 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function tenants()
+    public function tenant()
     {
         return $this->belongsTo(Tenant::class);
     }
 
     protected static function booted()
-    {     
-        static::addGlobalScope(new TenantScope);
+    {   
+        if(auth()->check()) {
+            static::addGlobalScope(new TenantScope);
+        }
+        
     }
 }
