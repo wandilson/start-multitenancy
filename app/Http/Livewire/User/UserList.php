@@ -14,21 +14,22 @@ class UserList extends Component
         'search' => ['except' => ''], 
         'totalPages' => ['except' => '5']
     ];
+
     public $search = '';
     public $totalPages = '5';
-
 
 
     public function render()
     {
         $users = User::latest()->where('name', 'LIKE', "%{$this->search}%")
-                            ->paginate($this->totalPages);
+                        ->paginate($this->totalPages);
+        
         return view('livewire.user.user-list', [
             'users'     => $users
         ]);
     }
 
-    
+
     public function clear()
     {
         $this->search = '';

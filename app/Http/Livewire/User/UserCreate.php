@@ -39,7 +39,6 @@ class UserCreate extends Component
         
         User::create([
             'name'  =>  $this->name,
-            'tenant_id'  =>  Auth()->user()->tenant_id,
             'last_name'  =>  $this->last_name,
             'email'  =>  $this->email,
             'password'  =>  Hash::make($this->password)

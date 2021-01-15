@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-
+use App\Observers\Tenant\ObserverTenant;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -75,6 +75,7 @@ class User extends Authenticatable
     {   
         if(auth()->check()) {
             static::addGlobalScope(new TenantScope);
+            static::observe(new ObserverTenant);
         }        
     }
 }
