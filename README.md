@@ -11,21 +11,14 @@ TailwindCss
 
 <br>
 
-##### Módulos
-- [ ] Usuários "Padrão"
-        - Gerencia dados Pessoais
-        - Troca Senha
-<br>
-- [ ] Clientes
-- [ ] Produtos
-- [ ] Gateway de Pagamentos
-
-<br>
-
 ##### Features
-- [ ] Registro de Tenant
-- [ ] Gestão de usuários por Tenant
-- [ ] ACL
+- [x] Registro de Tenant
+- [x] Gestão de usuários por Tenant
+- [ ] ACL "Módulo => Permissões"
+- [ ] Gerenciar Informações do Tenant
+    - Logo
+    - Nome Fantasia
+    - E-mail
 
 <br>
 
@@ -40,4 +33,20 @@ Gera e faz a inserção automatica do uuid ao cadastrar um novo Tenant "Empresa"
         self::creating(function($model){
             $model->uuid = Str::uuid();
         });
+    }
+```
+
+<br>
+
+Methodo responsável por filtrar o tenant
+**Deve ser colocado em todos os módulos que precisam de filtro por tenant*
+
+```php
+# App\Models\User
+
+    protected static function booted()
+    {   
+        if(auth()->check()) { // verifica se o usuário esta logado
+            static::addGlobalScope(new TenantScope); // Carrega classe responsável por filtrar o tenant
+        }        
     }

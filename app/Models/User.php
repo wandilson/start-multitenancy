@@ -75,7 +75,6 @@ class User extends Authenticatable
     {   
         if(auth()->check()) {
             static::addGlobalScope(new TenantScope);
-        }
-        
+        }        
     }
 }
