@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Observers\Tenant\ObserverTenant;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,9 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Scopes\Tenant\TenantScope;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
+
+use App\Tenant\Traits\TenantTraits;
+
 
 class User extends Authenticatable
 {
@@ -21,6 +20,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use TenantTraits;
 
     /**
      * The attributes that are mass assignable.
@@ -71,11 +71,5 @@ class User extends Authenticatable
         return $this->belongsTo(Tenant::class);
     }
 
-    protected static function booted()
-    {   
-        if(auth()->check()) {
-            static::addGlobalScope(new TenantScope);
-            static::observe(new ObserverTenant);
-        }        
-    }
+    
 }
