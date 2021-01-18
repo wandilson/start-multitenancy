@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Acl\Modules;
+namespace App\Http\Livewire\Acl\Roles;
 
-use App\Models\Acl\Modules\Module;
+use App\Models\Acl\Roles\Role;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class ModuleList extends Component
+class RoleList extends Component
 {
     use WithPagination;
 
@@ -21,11 +21,11 @@ class ModuleList extends Component
 
     public function render()
     {
-        $modules = Module::latest()->where('name', 'LIKE', "%{$this->search}%")
+        $roles = Role::latest()->where('name', 'LIKE', "%{$this->search}%")
                         ->paginate($this->totalPages);
         
-        return view('livewire.acl.modules.module-list', [
-            'modules'     => $modules
+        return view('livewire.acl.roles.role-list', [
+            'roles'     => $roles
         ]);
     }
 
@@ -40,7 +40,7 @@ class ModuleList extends Component
 
     public function destroy($id)
     {
-        $item = Module::find($id);
+        $item = Role::find($id);
         $item->delete();
     }
 }

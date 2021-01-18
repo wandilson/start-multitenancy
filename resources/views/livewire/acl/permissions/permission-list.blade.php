@@ -1,13 +1,16 @@
 <div>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Lista de Módulos') }}
+            {{ __('Permissões para o Módulo:') }} <span class="text-red-500 uppercase">{{ $module->name }}</span>
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <a href="{{ route('modules.create') }}" class="border bg-blue-400 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-400 focus:outline-none focus:shadow-outline">
+            <a href="{{ route('modules') }}" class="border text-black rounded-md px-4 py-2 transition duration-500 ease select-none hover:text-whitefocus:outline-none focus:shadow-outline mr-2">
+                Voltar
+            </a>
+            <a href="{{ route('module.permissions.create', $module->id) }}" class="border bg-blue-400 text-white rounded-md px-4 py-2 transition duration-500 ease select-none hover:text-white hover:bg-blue-400 focus:outline-none focus:shadow-outline">
                 Novo Registro
             </a>
         </div>
@@ -43,7 +46,7 @@
                                 <thead>
                                 <tr>
                                     <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Nome do Módulo
+                                        Nome da Permissão
                                     </th>
                                     <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Descrição
@@ -58,13 +61,13 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     
-                                    @foreach ($modules as $module)
+                                    @foreach ($permissions as $permission)
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <div class="">
                                                         <div class="text-sm font-medium font-bold text-gray-900 uppercase">
-                                                            {{ $module->name }}
+                                                            {{ $permission->name }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -74,7 +77,7 @@
                                                 <div class="flex items-center">
                                                     <div class="">
                                                         <div class="text-sm font-medium text-gray-900">
-                                                            {{ $module->label }}
+                                                            {{ $permission->label }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -84,19 +87,16 @@
                                                 <div class="flex items-center">
                                                     <div class="">
                                                         <div class="text-sm font-medium text-gray-900">
-                                                            {{ $module->created_at }}
+                                                            {{ $permission->created_at }}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{ route('module.permissions', $module->id) }}" class="border border-blue-300 bg-blue-300 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-blue-400 focus:outline-none focus:shadow-outline">
-                                                    Permissões do Módulo
-                                                </a>
-                                                <a href="{{ route('modules.edit', $module->id) }}" class="border border-yellow-300 bg-yellow-300 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-400 focus:outline-none focus:shadow-outline">
+                                                <a href="{{ route('permissions.edit', $permission->id) }}" class="border border-yellow-300 bg-yellow-300 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-yellow-400 focus:outline-none focus:shadow-outline">
                                                     Editar
                                                 </a>
-                                                <a href="javascript:void(0)" wire:click.prevent="destroy({{ $module->id }})" onclick="confirm('Deseja realmente remover esse registro? Todos os dados relacionados serão removidos!') || event.stopImmediatePropagation()" class="border border-red-400 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
+                                                <a href="javascript:void(0)" wire:click.prevent="destroy({{ $permission->id }})" onclick="confirm('Deseja realmente remover esse registro? Todos os dados relacionados serão removidos!') || event.stopImmediatePropagation()" class="border border-red-400 bg-red-500 text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">
                                                     Deletar
                                                 </a>
                                             </td>
@@ -108,9 +108,9 @@
                                 </tbody>
                             </table>
 
-                            @if ($modules->count())
+                            @if ($permissions->count())
                                 <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                                    {{ $modules->links() }}
+                                    {{ $permissions->links() }}
                                 </div>
                             @else
                                 <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">

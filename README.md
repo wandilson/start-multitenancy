@@ -83,11 +83,55 @@ class User extends Authenticatable
     }
 
 Exemplo de Uso:
-# App\Model\User
+# App\Tenant\Traits;
 
     protected static function booted()
     {   
         if(auth()->check()) { // verifica se o usuário esta logado
             static::observe(new ObserverTenant); // Carrega classe responsável por inserir o tenant no create
         }        
+    }
+```
+<br>
+
+4. Validações personalizadas "Valores unicos por Tenant"
+
+```php
+# App\Rules\Tenant
+
+    use App\Tenant\ManagerTenant;
+
+    class TenantUnique implements Rule
+    {
+        private $table, $column, $columnValue;
+
+        public function __construct($table, $columnValue = null, $column = 'id')
+        {
+            $this->table        = $table;
+            $this->column       = $column;
+            $this->columnValue  = $columnValue;
+        }
+
+        
+        public function passes($attribute, $value)
+        {
+            $tenant = app(ManagerTenant::class)->getTenantIdentify();
+            
+            $result = \DB::table($this->table)
+                        ->where($attribute, $value)
+                        ->where('tenant_id', $tenant)
+                        ->first();
+
+            
+            if ($result && $result->{$this->column} == $this->columnValue)
+                return true;
+
+            return is_null($result);
+        }
+
+        
+        public function message()
+        {
+            return 'O valor para o campo :attribute já esta em uso.';
+        }
     }
